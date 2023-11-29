@@ -129,7 +129,6 @@ function Gallery() {
             }
         })
         const [highestUser] = usersMap.sort((a, b) => b.gradeInt - a.gradeInt)
-        console.log(submission.code, usersMap, highestUser)
 
         const voteIcon = submission.votes?.includes(userEmail) ? heartFilledIcon : heartIcon
 

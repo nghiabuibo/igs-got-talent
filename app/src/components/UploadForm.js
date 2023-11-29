@@ -12,7 +12,7 @@ import uploadStartIcon from "../assets/svg/upload-start-icon.svg"
 import { toast } from "react-toastify"
 import { useParams } from "react-router-dom"
 
-import VideoPreview from "../utils/VideoPreview"
+import VideoPreview from "./VideoPreview"
 
 function Progress(props) {
     const { progress } = props

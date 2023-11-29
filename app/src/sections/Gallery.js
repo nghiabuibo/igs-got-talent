@@ -4,7 +4,7 @@ import socket from "../utils/Socket"
 import { GoogleLogin } from '@react-oauth/google';
 import { toast } from "react-toastify";
 
-import VideoPreview from "../utils/VideoPreview";
+import VideoPreview from "../components/VideoPreview";
 
 import styles from "./Gallery.module.css"
 

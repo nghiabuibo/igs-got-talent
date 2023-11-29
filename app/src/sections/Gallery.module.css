@@ -46,6 +46,34 @@
     color: #fff;
 }
 
+.searchWrapper {
+    position: relative;
+}
+
+.searchIcon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+}
+
+.search {
+    background: none;
+    outline: none;
+    border: 2px solid #ccc;
+    color: #fff;
+    border-radius: 1.5rem;
+    padding: 0.3rem 2.5rem 0.3rem 0.75rem;
+    width: 90px;
+    transition: width ease 0.3s;
+}
+
+.search.focus {
+    width: 200px;
+}
+
 .videoWrapper {
     background-image: url(../assets/image/video-bg.png);
     background-size: 100%;

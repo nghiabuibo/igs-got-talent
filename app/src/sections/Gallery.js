@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import socket from "../utils/Socket"
 
 import { GoogleLogin } from '@react-oauth/google';
@@ -11,18 +11,44 @@ import styles from "./Gallery.module.css"
 import heartIcon from "../assets/svg/heart-icon.svg"
 import heartFilledIcon from "../assets/svg/heart-icon-filled.svg"
 import signOutIcon from "../assets/svg/arrow-right-from-bracket.svg"
+import searchIcon from "../assets/svg/magnifying-glass.svg"
+import clearIcon from "../assets/svg/xmark.svg"
+
+import vnToEn from "../utils/VnToEn";
 
 function Gallery() {
     const [credential, setCredential] = useState('')
     const [userEmail, setUserEmail] = useState('')
     const [submissions, setSubmissions] = useState([])
     const [filter, setFilter] = useState('all')
+    const [search, setSearch] = useState('')
+    const [searchFocus, setSearchFocus] = useState(false)
+
+    const searchWrapperRef = useRef(null)
+    const searchInputRef = useRef(null)
 
     useEffect(() => {
         socket.connect()
 
         return () => {
             socket.disconnect()
+        }
+    }, [])
+
+    useEffect(() => {
+        const handleSearchFocus = (e) => {
+            if (searchWrapperRef.current && !searchWrapperRef.current.contains(e.target)) {
+                setSearchFocus(false)
+                return
+            }
+            setSearchFocus(true)
+            searchInputRef.current?.focus()
+        }
+
+        window.addEventListener('click', handleSearchFocus)
+
+        return () => {
+            window.removeEventListener('click', handleSearchFocus)
         }
     }, [])
 
@@ -119,6 +145,8 @@ function Gallery() {
     })
 
     const renderSubmissions = submissions.map(submission => {
+        if (!submission.users || !submission.users.length) return false
+
         // get users highest grade
         const usersMap = submission.users?.map(user => {
             const gradeStr = user.grade.replace('N/A', '-1').replace('Khối K', '0').replace('Khối ', '')
@@ -159,6 +187,16 @@ function Gallery() {
         }
 
         if (filter !== 'all' && filter !== division) return false
+        if (search !== '') {
+            console.log(submission.code, search)
+            if (
+                !submission.users.some(user => {
+                    return vnToEn(user.name).toLowerCase().includes(vnToEn(search).toLowerCase())
+                        || vnToEn(user.email).toLowerCase().includes(vnToEn(search).toLowerCase())
+                })
+                && submission.code.toLowerCase() !== search.toLowerCase()
+            ) return false
+        }
 
         return (
             <div key={submission.code} className="col-xl-4 col-lg-6 mb-3">
@@ -203,6 +241,10 @@ function Gallery() {
         <div className="row py-5 mb-5 g-0">
             <div className="d-flex flex-wrap align-items-center justify-content-center gap-2 mb-3">
                 {renderFilters}
+                <div className={styles.searchWrapper} ref={searchWrapperRef}>
+                    <input ref={searchInputRef} type="text" className={`${styles.search} ${searchFocus ? styles.focus : ''}`} value={search} onInput={(e) => setSearch(e.target.value)} />
+                    <img role="button" alt="Search" src={!search ? searchIcon : clearIcon} className={styles.searchIcon} onClick={() => setSearch('')} />
+                </div>
             </div>
             {renderSubmissions}
         </div>

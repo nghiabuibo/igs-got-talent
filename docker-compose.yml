@@ -16,7 +16,6 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ./api/database:/api/database:rw
-      - ./api/public:/api/public:rw
       - ./api/public/uploads:/api/public/uploads:rw
     ports:
       - 1337:1337

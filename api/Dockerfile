@@ -11,7 +11,7 @@ RUN npm install
 COPY ./config ./config
 COPY ./server.js ./
 
-COPY ./public ./public
+COPY ./public/robots.txt ./public/robots.txt
 COPY ./src ./src
 COPY ./.env* ./
 

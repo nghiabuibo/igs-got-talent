@@ -1,0 +1,27 @@
+.videoWrapper {
+    background-image: url(../assets/image/video-bg.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 10.2%;
+}
+
+.voteWrapper {
+    padding: 0 10%;
+    margin-top: -5%;
+}
+
+.voteIcon {
+    height: 40px;
+}
+
+.voteCount {
+    width: 87px;
+    height: 40px;
+    background-image: url(../assets/svg/vote-count-bg.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    padding-left: 5px;
+    font-size: 1.4rem;
+    font-weight: 500;
+}

@@ -1,0 +1,32 @@
+{
+  "kind": "singleType",
+  "collectionName": "vote_settings",
+  "info": {
+    "singularName": "vote-setting",
+    "pluralName": "vote-settings",
+    "displayName": "Vote Settings",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "startTime": {
+      "type": "datetime"
+    },
+    "endTime": {
+      "type": "datetime"
+    },
+    "showNotification": {
+      "type": "boolean",
+      "default": false
+    },
+    "description": {
+      "type": "string"
+    },
+    "cta": {
+      "type": "string"
+    }
+  }
+}

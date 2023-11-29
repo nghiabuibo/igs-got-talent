@@ -16,6 +16,7 @@ function Gallery() {
     const [credential, setCredential] = useState('')
     const [userEmail, setUserEmail] = useState('')
     const [submissions, setSubmissions] = useState([])
+    const [filter, setFilter] = useState('all')
 
     useEffect(() => {
         socket.connect()
@@ -111,11 +112,58 @@ function Gallery() {
         socket.emit('submission:vote', code)
     }
 
+    const renderFilters = ['all', 'kids', 'junior', 'senior'].map(filterValue => {
+        return (
+            <button key={filterValue} className={`text-capitalize ${styles.filterBtn} ${styles[filterValue]} ${filter === filterValue ? styles.selected : ''}`} onClick={() => setFilter(filterValue)}>{filterValue}</button>
+        )
+    })
+
     const renderSubmissions = submissions.map(submission => {
+        // get users highest grade
+        const usersMap = submission.users?.map(user => {
+            const gradeStr = user.grade.replace('N/A', '-1').replace('Khối K', '0').replace('Khối ', '')
+            return {
+                name: user.name,
+                school: user.school,
+                gradeInt: parseInt(gradeStr)
+            }
+        })
+        const [highestUser] = usersMap.sort((a, b) => b.gradeInt - a.gradeInt)
+        console.log(submission.code, usersMap, highestUser)
+
         const voteIcon = submission.votes?.includes(userEmail) ? heartFilledIcon : heartIcon
+
+        let division
+        switch (highestUser.gradeInt) {
+            case 0:
+            case 1:
+            case 2:
+                division = 'kids'
+                break;
+
+            case 3:
+            case 4:
+            case 5:
+                division = 'junior'
+                break;
+
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+                division = 'senior'
+                break;
+
+            default:
+                division = 'na'
+        }
+
+        if (filter !== 'all' && filter !== division) return false
+
         return (
             <div key={submission.code} className="col-xl-4 col-lg-6 mb-3">
-                <div className={`${styles.videoWrapper}`}>
+                <div className={`${styles.videoWrapper} ${styles[division]}`}>
                     <VideoPreview src={submission.video?.url} />
                 </div>
 
@@ -128,7 +176,7 @@ function Gallery() {
                             <GoogleLogin onSuccess={handleAuthSuccess} onError={handleAuthError} type='icon' shape='pill' />
                     }
 
-                    <div className={`d-flex align-items-center justify-content-center ${styles.voteCount}`}>
+                    <div className={`d-flex align-items-center justify-content-center ${styles.voteCount} ${styles[division]}`}>
                         {submission.votes?.length ?? 0}
                     </div>
 
@@ -142,12 +190,21 @@ function Gallery() {
                         }
                     </div>
                 </div>
+
+                <div className={`${styles.submissionInfo} ${styles[division]}`}>
+                    <div className={styles.submissionInfoField}>Division: <span className="text-capitalize">{division}</span></div>
+                    <div className={styles.submissionInfoField}>Name: {highestUser.name}</div>
+                    <div className={styles.submissionInfoField}>School: {highestUser.school}</div>
+                </div>
             </div>
         )
     })
 
     return (
         <div className="row py-5 mb-5 g-0">
+            <div className="d-flex flex-wrap align-items-center justify-content-center gap-2 mb-3">
+                {renderFilters}
+            </div>
             {renderSubmissions}
         </div>
     )

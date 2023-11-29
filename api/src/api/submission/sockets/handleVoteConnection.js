@@ -6,7 +6,7 @@ module.exports = async ({ strapi }, socket) => {
         filters: {
             status: 'active'
         },
-        populate: ['video']
+        populate: ['video', 'users']
     })
     socket.emit('submission:load', submissions)
 }

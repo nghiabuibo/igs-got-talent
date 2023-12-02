@@ -103,6 +103,10 @@
     height: 40px;
 }
 
+.signInText {
+    font-size: 0.775rem;
+}
+
 .voteCount {
     width: 87px;
     height: 40px;

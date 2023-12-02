@@ -239,7 +239,7 @@ function Gallery() {
                                 ?
                                 <img src={signOutIcon} role="button" alt="Sign out" className={`${styles.voteIcon}`} onClick={handleSignOut} />
                                 :
-                                <small>Sign in to vote</small>
+                                <small className={styles.signInText}>Sign in to vote</small>
                         }
                     </div>
                 </div>

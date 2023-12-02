@@ -10,13 +10,13 @@ import voteIntroImg from "../assets/image/vote-intro.png"
 import Gallery from "../sections/Gallery"
 import Box from "../components/Box"
 
-import emailIcon from "../assets/svg/email-icon.svg"
+// import emailIcon from "../assets/svg/email-icon.svg"
 import phoneIcon from "../assets/svg/phone-icon.svg"
 import igtLogo from "../assets/image/igt-logo.png"
 
 function Round2() {
     return (
-        <div className="row mb-5">
+        <div className={`row ${styles.round2Wrapper}`}>
             <div className="col-lg-10 offset-lg-1">
                 <img src={round2Img} alt="Round 2" className="img-fluid user-select-none pe-none" />
             </div>
@@ -51,19 +51,19 @@ function Intro() {
 
 function Outro() {
     return (
-        <div className="row py-5">
-            <p>Ivy Global School là trường Quốc tế Mỹ trực tuyến, được thành lập tại Florida, USA.</p>
+        <div className="row pb-5">
+            {/* <p>Ivy Global School là trường Quốc tế Mỹ trực tuyến, được thành lập tại Florida, USA.</p>
             <p>Các nội dung giảng dạy tại <strong>Ivy Global School</strong> được cung cấp bởi các tổ chức giáo dục, trường học uy tín tại Mỹ, theo chuẩn Common Core State Standards của Bộ Giáo Dục Mỹ, và được kiểm định bởi Cognia - Tổ chức kiểm định chất lượng lớn nhất tại Mỹ.</p>
             <p className="d-flex align-items-center gap-3">
                 <img src={emailIcon} className={styles.outroIcon} alt="Email" />
                 <a href="mailto:info@ivyglobalschool.org" className="text-white">info@ivyglobalschool.org</a>
-            </p>
-            <p className="d-flex align-items-center gap-3">
+            </p> */}
+            <p className="d-flex align-items-center justify-content-center gap-3">
                 <img src={phoneIcon} className={styles.outroIcon} alt="Phone" />
                 <span>
-                    KV Miền Bắc: <a href="tel:0898083111" className="text-white">0898 083 111</a>
+                    Northern Region: <a href="tel:0898083111" className="text-white">0898 083 111</a>
                     <br />
-                    KV Miền Nam: <a href="tel:0906924592" className="text-white">0906 924 592</a>
+                    Southern Region: <a href="tel:0906924592" className="text-white">0906 924 592</a>
                 </span>
             </p>
             <div className="text-center">

@@ -229,8 +229,8 @@ function Gallery() {
                 </div>
 
                 <div className={`${styles.submissionInfo} ${styles[division]}`}>
-                    <div className={styles.submissionInfoField}>Division: <span className="text-capitalize">{division}</span></div>
                     <div className={styles.submissionInfoField}>Name: {highestUser.name}</div>
+                    <div className={styles.submissionInfoField}>Division: <span className="text-capitalize">{division}</span></div>
                     <div className={styles.submissionInfoField}>School: {highestUser.school}</div>
                 </div>
             </div>

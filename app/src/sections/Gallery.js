@@ -15,6 +15,7 @@ import searchIcon from "../assets/svg/magnifying-glass.svg"
 import clearIcon from "../assets/svg/xmark.svg"
 
 import vnToEn from "../utils/VnToEn";
+import { useSearchParams } from "react-router-dom";
 
 function Gallery() {
     const [credential, setCredential] = useState('')
@@ -23,6 +24,8 @@ function Gallery() {
     const [filter, setFilter] = useState('all')
     const [search, setSearch] = useState('')
     const [searchFocus, setSearchFocus] = useState(false)
+
+    const [params] = useSearchParams()
 
     const searchWrapperRef = useRef(null)
     const searchInputRef = useRef(null)
@@ -51,6 +54,11 @@ function Gallery() {
             window.removeEventListener('click', handleSearchFocus)
         }
     }, [])
+
+    useEffect(() => {
+        const code = params.get('code')
+        if (code) setSearch(code)
+    }, [params])
 
     useEffect(() => {
         const credentialLocal = localStorage.getItem('igtCredential')
@@ -138,6 +146,11 @@ function Gallery() {
         socket.emit('submission:vote', code)
     }
 
+    const handleCopyUrl = (code) => {
+        navigator.clipboard.writeText(`${process.env.REACT_APP_APP_URL}/vote?code=${code}`)
+        toast.success('URL copied!', { theme: 'colored' })
+    }
+
     const renderFilters = ['all', 'kids', 'junior', 'senior'].map(filterValue => {
         return (
             <button key={filterValue} className={`text-capitalize ${styles.filterBtn} ${styles[filterValue]} ${filter === filterValue ? styles.selected : ''}`} onClick={() => setFilter(filterValue)}>{filterValue}</button>
@@ -188,7 +201,6 @@ function Gallery() {
 
         if (filter !== 'all' && filter !== division) return false
         if (search !== '') {
-            console.log(submission.code, search)
             if (
                 !submission.users.some(user => {
                     return vnToEn(user.name).toLowerCase().includes(vnToEn(search).toLowerCase())
@@ -217,13 +229,17 @@ function Gallery() {
                         {submission.votes?.length ?? 0}
                     </div>
 
+                    <div role="button" onClick={() => handleCopyUrl(submission.code)}>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" fill="#fff" height="25"><path d="M591.5 256c50-50 50-131 0-181s-131-50-181 0L387.9 97.6c-6.2 6.2-6.2 16.4 0 22.6s16.4 6.2 22.6 0l22.6-22.6c37.5-37.5 98.3-37.5 135.8 0s37.5 98.3 0 135.8L444.3 357.9c-37.4 37.4-98.1 37.4-135.6 0c-35.6-35.6-37.6-92.6-4.7-130.6l5.3-6.1c5.8-6.7 5.1-16.8-1.6-22.6s-16.8-5.1-22.6 1.6l-5.3 6.1c-43.9 50.7-41.2 126.7 6.2 174.1c49.9 49.9 130.9 49.9 180.8 0L591.5 256zM48.5 256c-50 50-50 131 0 181s131 50 181 0l22.6-22.6c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0l-22.6 22.6c-37.5 37.5-98.3 37.5-135.8 0s-37.5-98.3 0-135.8L195.7 154.1c37.4-37.4 98.1-37.4 135.6 0c35.6 35.6 37.6 92.6 4.7 130.6l-5.3 6.1c-5.8 6.7-5.1 16.8 1.6 22.6s16.8 5.1 22.6-1.6l5.3-6.1c43.9-50.7 41.2-126.7-6.2-174.1C303.9 81.5 223 81.5 173 131.4L48.5 256z" /></svg>
+                    </div>
+
                     <div className={`ms-auto text-end`}>
                         {
                             userEmail
                                 ?
                                 <img src={signOutIcon} role="button" alt="Sign out" className={`${styles.voteIcon}`} onClick={handleSignOut} />
                                 :
-                                <div>Sign in to vote</div>
+                                <small>Sign in to vote</small>
                         }
                     </div>
                 </div>

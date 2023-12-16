@@ -1,6 +1,7 @@
 const handleVoteAuth = require("../src/api/submission/sockets/handleVoteAuth");
 const handleVoteConnection = require("../src/api/submission/sockets/handleVoteConnection");
 const handleVote = require("../src/api/submission/sockets/handleVote");
+const handleVoteFinal = require("../src/api/submission/sockets/handleVoteFinal");
 
 module.exports = ({ env }) => ({
     email: {
@@ -53,6 +54,10 @@ module.exports = ({ env }) => ({
                 {
                     name: 'submission:vote',
                     handler: handleVote
+                },
+                {
+                    name: 'submission:voteFinal',
+                    handler: handleVoteFinal
                 }
             ],
             socket: {

@@ -33,6 +33,10 @@ const router = createBrowserRouter([
   {
     path: '/vote',
     element: <Vote />
+  },
+  {
+    path: '/finalround',
+    element: <Vote isFinal={true} />
   }
 ])
 

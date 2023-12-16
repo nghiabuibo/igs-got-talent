@@ -362,6 +362,83 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
+export interface ApiSubmissionSubmission extends Schema.CollectionType {
+  collectionName: 'submissions';
+  info: {
+    singularName: 'submission';
+    pluralName: 'submissions';
+    displayName: 'Submission';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    code: Attribute.UID;
+    users: Attribute.Relation<
+      'api::submission.submission',
+      'oneToMany',
+      'plugin::users-permissions.user'
+    >;
+    status: Attribute.Enumeration<['pending', 'review', 'active', 'final']>;
+    video: Attribute.Media;
+    description: Attribute.Text;
+    votes: Attribute.JSON;
+    finalRoundVotes: Attribute.JSON;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::submission.submission',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::submission.submission',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiVoteSettingVoteSetting extends Schema.SingleType {
+  collectionName: 'vote_settings';
+  info: {
+    singularName: 'vote-setting';
+    pluralName: 'vote-settings';
+    displayName: 'Vote Settings';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    startTime: Attribute.DateTime;
+    endTime: Attribute.DateTime;
+    showNotification: Attribute.Boolean & Attribute.DefaultTo<false>;
+    description: Attribute.String;
+    cta: Attribute.String;
+    finalRound: Attribute.Boolean & Attribute.DefaultTo<false>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::vote-setting.vote-setting',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::vote-setting.vote-setting',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -703,81 +780,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
 }
 
-export interface ApiSubmissionSubmission extends Schema.CollectionType {
-  collectionName: 'submissions';
-  info: {
-    singularName: 'submission';
-    pluralName: 'submissions';
-    displayName: 'Submission';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    code: Attribute.UID;
-    users: Attribute.Relation<
-      'api::submission.submission',
-      'oneToMany',
-      'plugin::users-permissions.user'
-    >;
-    status: Attribute.Enumeration<['pending', 'review', 'active']>;
-    video: Attribute.Media;
-    description: Attribute.Text;
-    votes: Attribute.JSON;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::submission.submission',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::submission.submission',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiVoteSettingVoteSetting extends Schema.SingleType {
-  collectionName: 'vote_settings';
-  info: {
-    singularName: 'vote-setting';
-    pluralName: 'vote-settings';
-    displayName: 'Vote Settings';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    startTime: Attribute.DateTime;
-    endTime: Attribute.DateTime;
-    showNotification: Attribute.Boolean & Attribute.DefaultTo<false>;
-    description: Attribute.String;
-    cta: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::vote-setting.vote-setting',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::vote-setting.vote-setting',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -788,14 +790,14 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
+      'api::submission.submission': ApiSubmissionSubmission;
+      'api::vote-setting.vote-setting': ApiVoteSettingVoteSetting;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::i18n.locale': PluginI18NLocale;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
-      'api::submission.submission': ApiSubmissionSubmission;
-      'api::vote-setting.vote-setting': ApiVoteSettingVoteSetting;
     }
   }
 }

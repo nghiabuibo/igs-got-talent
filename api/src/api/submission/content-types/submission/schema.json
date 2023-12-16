@@ -27,7 +27,8 @@
       "enum": [
         "pending",
         "review",
-        "active"
+        "active",
+        "final"
       ]
     },
     "video": {
@@ -45,6 +46,9 @@
       "type": "text"
     },
     "votes": {
+      "type": "json"
+    },
+    "finalRoundVotes": {
       "type": "json"
     }
   }

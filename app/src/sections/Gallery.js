@@ -17,7 +17,8 @@ import clearIcon from "../assets/svg/xmark.svg"
 import vnToEn from "../utils/VnToEn";
 import { useSearchParams } from "react-router-dom";
 
-function Gallery() {
+function Gallery(props) {
+    const { isFinal } = props
     const [credential, setCredential] = useState('')
     const [userEmail, setUserEmail] = useState('')
     const [submissions, setSubmissions] = useState([])
@@ -31,12 +32,18 @@ function Gallery() {
     const searchInputRef = useRef(null)
 
     useEffect(() => {
+        socket.io.opts.query = {}
         socket.connect()
 
         return () => {
             socket.disconnect()
         }
     }, [])
+
+    useEffect(() => {
+        socket.io.opts.query.isFinal = !isFinal ? 0 : 1
+        socket.disconnect().connect()
+    }, [isFinal])
 
     useEffect(() => {
         const handleSearchFocus = (e) => {
@@ -68,7 +75,7 @@ function Gallery() {
     useEffect(() => {
         if (!credential) return
 
-        socket.io.opts.query = { credential }
+        socket.io.opts.query.credential = credential
         socket.disconnect().connect()
         socket.emit('submission:auth')
     }, [credential])
@@ -92,6 +99,7 @@ function Gallery() {
                     if (submission.code !== updateSubmission.code) return false
 
                     submission.votes = updateSubmission.votes
+                    submission.finalRoundVotes = updateSubmission.finalRoundVotes
                     return true
                 })
                 return updateSubmissions
@@ -99,9 +107,10 @@ function Gallery() {
         })
 
         socket.on('socket:error', (message) => {
-            handleSignOut()
-
-            if (message.includes('Token used too late')) return
+            if (message.includes('Token used too late')) {
+                handleSignOut()
+                return
+            }
 
             toast.error(message, { theme: 'colored' })
         })
@@ -143,7 +152,8 @@ function Gallery() {
     }
 
     const handleVote = (code) => {
-        socket.emit('submission:vote', code)
+        const voteEvent = !isFinal ? 'submission:vote' : 'submission:voteFinal'
+        socket.emit(voteEvent, code)
     }
 
     const handleCopyUrl = (code) => {
@@ -171,7 +181,9 @@ function Gallery() {
         })
         const [highestUser] = usersMap.sort((a, b) => b.gradeInt - a.gradeInt)
 
-        const voteIcon = submission.votes?.includes(userEmail) ? heartFilledIcon : heartIcon
+        const voteIcon = !isFinal 
+        ? submission.votes?.includes(userEmail) ? heartFilledIcon : heartIcon
+        : submission.finalRoundVotes?.includes(userEmail) ? heartFilledIcon : heartIcon
 
         let division
         switch (highestUser.gradeInt) {
@@ -226,7 +238,7 @@ function Gallery() {
                     }
 
                     <div className={`d-flex align-items-center justify-content-center ${styles.voteCount} ${styles[division]}`}>
-                        {submission.votes?.length ?? 0}
+                        {(!isFinal ? submission.votes?.length : submission.finalRoundVotes?.length) ?? 0}
                     </div>
 
                     <div role="button" onClick={() => handleCopyUrl(submission.code)}>

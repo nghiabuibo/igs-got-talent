@@ -27,6 +27,10 @@
     },
     "cta": {
       "type": "string"
+    },
+    "finalRound": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

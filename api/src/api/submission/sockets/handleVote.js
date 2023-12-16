@@ -2,6 +2,7 @@
 
 const isVoteable = require("../../../utils/isVoteable")
 const verifyGoogleCredential = require("../../../utils/verifyGoogleCredential");
+const updateVotes = require("../../../utils/updateVotes")
 
 module.exports = async ({ strapi, io }, socket, code) => {
     const isVoteableCheck = await isVoteable()
@@ -11,10 +12,16 @@ module.exports = async ({ strapi, io }, socket, code) => {
     }
 
     const { credential } = socket.handshake.query
+    // @ts-ignore
     const { email } = await verifyGoogleCredential(credential).catch((err) => {
         console.error(err)
         socket.emit('socket:error', err.message)
     })
+
+    if (!email) {
+        socket.emit('socket:error', 'Invalid email!')
+        return
+    }
 
     const submission = await strapi.service('api::submission.submission').findByCode(code)
 
@@ -24,17 +31,11 @@ module.exports = async ({ strapi, io }, socket, code) => {
     }
 
     const submissionVotes = submission.votes ?? []
-    const voteIndex = submissionVotes.indexOf(email)
-
-    if (voteIndex === -1) {
-        submissionVotes.push(email)
-    } else {
-        submissionVotes.splice(voteIndex, 1)
-    }
+    const updatedVotes = updateVotes(submissionVotes, email)
     
     const updateSubmission = await strapi.entityService.update('api::submission.submission', submission.id, {
         data: {
-            votes: submissionVotes
+            votes: updatedVotes
         }
     }).catch((err) => {
         console.log(err)

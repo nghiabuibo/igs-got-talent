@@ -5,7 +5,9 @@ import styles from "./Vote.module.css"
 import Logo from "../sections/Logo"
 
 import round2Img from "../assets/image/vote-round-2.png"
+import roundFinalImg from "../assets/image/final-text.png"
 import voteIntroImg from "../assets/image/vote-intro.png"
+import voteIntroFinalImg from "../assets/image/upload-bottom.png"
 
 import Gallery from "../sections/Gallery"
 import Box from "../components/Box"
@@ -14,35 +16,61 @@ import Box from "../components/Box"
 import phoneIcon from "../assets/svg/phone-icon.svg"
 import igtLogo from "../assets/image/igt-logo.png"
 
-function Round2() {
+function RoundName(props) {
+    const { isFinal } = props
     return (
-        <div className={`row ${styles.round2Wrapper}`}>
+        <div className={`row mb-5 ${styles.roundNameWrapper}`}>
             <div className="col-lg-10 offset-lg-1">
-                <img src={round2Img} alt="Round 2" className="img-fluid user-select-none pe-none" />
+                <img src={!isFinal ? round2Img : roundFinalImg} alt="Round Name" className="img-fluid user-select-none pe-none" />
             </div>
         </div>
     )
 }
 
-function Intro() {
+function Intro(props) {
+    const { isFinal } = props
     return (
         <div className="row mb-5 pb-5 align-items-center">
-            <div className="col-md-4">
-                <img src={voteIntroImg} alt="Voting Intro" className="img-fluid user-select-none pe-none" />
+            <div className={`col-md-${!isFinal ? '4' : '6'}`}>
+                <img src={!isFinal ? voteIntroImg: voteIntroFinalImg} alt="Voting Intro" className="img-fluid user-select-none pe-none" />
             </div>
-            <div className="col-md-8">
+            <div className={`col-md-${!isFinal ? '8' : '6'}`}>
                 <Box>
-                    <ul className={`mb-0 ${stylesTimeline.unStyle} ${stylesTimeline.customBullet} ${stylesTimeline.timelineList}`}>
-                        <li>
-                            Scoring and voting deadline:<br />
-                            <strong>At 11:59 PM on 10th December 2023.</strong>
-                        </li>
-                        <li>
-                            Regarding the voting mechanism:<br />
-                            <strong>One account can vote for multiple performances simultaneously but each performance can only be voted once.</strong>
-                        </li>
-                        <li>All votes that involve virtual interferences, inaccurate information, or violate any of the mentioned regulations may be refused by The Organizing Committee, leading to disqualification of the submitted act or revocation of prizes.</li>
-                    </ul>
+                    {
+                        !isFinal &&
+                        <ul className={`mb-0 ${stylesTimeline.unStyle} ${stylesTimeline.customBullet} ${stylesTimeline.timelineList}`}>
+                            <li>
+                                Scoring and voting deadline:<br />
+                                <strong>At 11:59 PM on 10th December 2023.</strong>
+                            </li>
+                            <li>
+                                Regarding the voting mechanism:<br />
+                                <strong>One account can vote for multiple performances simultaneously but each performance can only be voted once.</strong>
+                            </li>
+                            <li>All votes that involve virtual interferences, inaccurate information, or violate any of the mentioned regulations may be refused by The Organizing Committee, leading to disqualification of the submitted act or revocation of prizes.</li>
+                        </ul>
+                    }
+
+                    {
+                        isFinal &&
+                        <ul className={`mb-0 ${stylesTimeline.unStyle} ${stylesTimeline.customBullet} ${stylesTimeline.timelineList}`}>
+                            <li>
+                                Regarding the voting mechanism:<br />
+                                <strong>One account can vote for multiple performances simultaneously but each performance can only be voted once.</strong>
+                                <br/>
+                                <br/>
+                                <em>Mỗi tài khoản chỉ được bình chọn 01 lần cho mỗi tiết mục. Một tài khoản có thể bình chọn cùng lúc nhiều tiết mục.</em>
+                                <br/>
+                                <br/>
+                            </li>
+                            <li>
+                                <strong>All votes that involve virtual interferences, inaccurate information, or violate any of the mentioned regulations may be refused by The Organizing Committee, leading to disqualification of the submitted act or revocation of prizes.</strong>
+                                <br/>
+                                <br/>
+                                <em>Tất cả những lượt bình chọn có can thiệp của tương tác ảo, thông tin không chính xác, BTC có quyền từ chối bài dự thi, từ chối trao giải hoặc thu hồi giải thưởng nếu phát hiện bài dự thi vi phạm một trong những quy định kể trên.</em>
+                            </li>
+                        </ul>
+                    }
                 </Box>
             </div>
         </div>
@@ -73,13 +101,14 @@ function Outro() {
     )
 }
 
-function Vote() {
+function Vote(props) {
+    const { isFinal } = props
     return (
         <div className={`container ${stylesHome.home}`}>
             <Logo igtLogo={true} />
-            <Round2 />
-            <Intro />
-            <Gallery />
+            <RoundName isFinal={isFinal} />
+            <Intro isFinal={isFinal} />
+            <Gallery isFinal={isFinal} />
             <Outro />
         </div>
     )

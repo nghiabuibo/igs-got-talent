@@ -157,7 +157,8 @@ function Gallery(props) {
     }
 
     const handleCopyUrl = (code) => {
-        navigator.clipboard.writeText(`${process.env.REACT_APP_APP_URL}/vote?code=${code}`)
+        const voteUrl = !isFinal ? 'vote' : 'finalround'
+        navigator.clipboard.writeText(`${process.env.REACT_APP_APP_URL}/${voteUrl}?code=${code}`)
         toast.success('URL copied!', { theme: 'colored' })
     }
 

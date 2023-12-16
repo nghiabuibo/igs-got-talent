@@ -224,7 +224,7 @@ function Gallery(props) {
         }
 
         return (
-            <div key={submission.code} className="col-xl-4 col-lg-6 mb-3">
+            <div key={submission.code} className={`col-xl-${!isFinal ? '4' : '6'} col-lg-6 mb-3`}>
                 <div className={`${styles.videoWrapper} ${styles[division]}`}>
                     <VideoPreview src={submission.video?.url} />
                 </div>

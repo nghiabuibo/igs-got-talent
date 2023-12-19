@@ -22,6 +22,26 @@ services:
     networks:
       - app_network
     restart: always
+  award-app:
+    build: 
+      context: ./award-app
+      dockerfile: ./Dockerfile
+    ports:
+      - 8181:8181
+    networks:
+      - app_network
+    restart: always
+  award-api:
+    build: 
+      context: ./award-api
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./award-api:/var/www/html:rw
+    ports:
+      - 8282:8282
+    networks:
+      - app_network
+    restart: always
   database:
     image: mysql:8.0.35
     command: --default-authentication-plugin=mysql_native_password

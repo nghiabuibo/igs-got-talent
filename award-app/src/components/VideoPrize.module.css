@@ -1,0 +1,111 @@
+.video {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgb(0 0 0 / 0.2);
+	backdrop-filter: blur(5px);
+	z-index: 10;
+	pointer-events: none;
+	user-select: none;
+	opacity: 0;
+	transition: opacity ease 1s;
+}
+
+.video.show {
+	opacity: 1;
+}
+
+.videoEntry {
+	position: fixed;
+	color: #fff;
+	font-size: 4vw;
+	text-transform: uppercase;
+	font-weight: 600;
+	z-index: 30;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	user-select: none;
+	position: none;
+	text-align: center;
+	opacity: 0;
+	width: 100%;
+}
+
+.videoEntry.horizontal {
+	font-size: 7.25vh;
+}
+
+.videoEntry.show {
+	opacity: 1;
+}
+
+.videoEntry.hide {
+	opacity: 0;
+}
+
+.videoEntry.show.fade {
+	transition: opacity linear 1s;
+}
+
+.videoEntry.hide.fade {
+	transition: opacity linear 1.65s;
+}
+
+.name {
+	margin-top: 16vw;
+	font-size: 133%;
+	font-weight: 700;
+}
+
+.videoEntry.horizontal .name {
+	margin-top: 25vh;
+}
+
+.prize {
+	font-weight: 700;
+	margin-top: 2.9vw;
+}
+
+.videoEntry.horizontal .prize {
+	margin-top: 4vh;
+}
+
+.prizeName {
+	font-weight: 400;
+}
+
+.toggleMuted {
+	position: absolute;
+	top: 13%;
+	right: 0;
+	background-color: rgb(0 0 0 / 0.5);
+	padding: 0.9rem 1.2rem;
+	border-radius: 1rem 0 0 1rem;
+	z-index: 15;
+	cursor: pointer;
+	user-select: none;
+	opacity: 0.4;
+	transition: opacity ease 0.3s;
+}
+
+.toggleMuted img {
+	width: 2rem;
+	height: 2rem;
+}
+
+.toggleMuted:hover {
+	opacity: 1;
+}
+
+@media (max-width: 991px) {
+	.toggleMuted {
+		padding: 0.7rem 1rem;
+	}
+	.toggleMuted img {
+		width: 1.8rem;
+		height: 1.8rem;
+	}
+}

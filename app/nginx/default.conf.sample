@@ -32,6 +32,26 @@ server {
         rewrite ^/cms(/.*)$ $1 break;
     }
 
+    location /award {
+        proxy_pass http://award-app:8181;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        rewrite ^/award(/.*)$ $1 break;
+    }
+
+    location /award/api {
+        proxy_pass http://award-api:8282;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        rewrite ^/award/api(/.*)$ $1 break;
+    }
+
     error_page   500 502 503 504  /50x.html;
     location = /50x.html {
         root   /usr/share/nginx/html;
